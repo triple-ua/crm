@@ -1,0 +1,64 @@
+<?php
+
+class Test 
+{
+    public function test()
+    {
+        $_SESSION['login'] .= 'kk';
+        $_SESSION['password'] .= 'kk';
+    }
+
+    public function insert()
+    {
+        $pdo = new PDO('mysql:host=localhost;dbname=crm', 'root', 'root');
+
+        $stmt = $pdo->prepare(
+            'INSERT INTO employee (name, surname, status, login, password)
+            VALUES (:name, :surname, :status, :login, :password)'
+        );
+
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':surname', $surname);
+        $stmt->bindParam(':status', $status);
+        $stmt->bindParam(':login', $login);
+        $stmt->bindParam(':password', $password);
+
+        $name = 'alex';
+        $surname = 'a';
+        $status = '3';
+        $login = 'smth';
+        $password = '4444';
+        $stmt->execute();
+    }
+
+    public function select()
+    {
+        $pdo = new PDO('mysql:host=localhost;dbname=crm', 'root', 'root');
+
+        $stmt = $pdo->prepare(
+            'SELECT * FROM employee'
+        );
+
+        $stmt->execute();
+        
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        echo '<pre>';
+        foreach($result as $row)
+        {
+            print_r($row);
+        }
+        echo '</pre>';
+    }
+
+    public function delete()
+    {
+        $pdo = new PDO('mysql:host=localhost;dbname=crm', 'root', 'root');
+
+        $stmt = $pdo->prepare(
+            'DELETE FROM employee WHERE name = "sasha"'
+        );
+
+        $stmt->execute();
+    }
+}
